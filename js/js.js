@@ -1,63 +1,25 @@
-document.querySelectorAll(".MainTree li").forEach(function (it, ind) {
-    Array.prototype.slice.call(it.childNodes).forEach(function (item, index) {
-        if (item?.localName == "ul") {
-            it.classList.add('parent_li');
-            it.querySelector('span').setAttribute("title", "Zwiń tę gałąź");
-        }
-    });
-})
-
-
-
-document.querySelectorAll('.MainTree li.parent_li > span').forEach(function (item, index) {
-    item.addEventListener('click', function (e) {
-        var childrens = document.querySelectorAll(getDomPath(item).join(" > ").split("span")[0] + ' ul li');
-        childrens.forEach(function (it, ind) {
-            if (it.getAttribute("hidden") == null) {
-                it.style.display = "none";
-                it.setAttribute("hidden", "true");
-                item.setAttribute("title", "Rozwiń tę gałąź");
-                if (!document.querySelector(getDomPath(item).join(" > ") + ' i').classList.contains("fa-folder-open")) {
-                    document.querySelector(getDomPath(item).join(" > ") + ' i').classList.remove('fa-minus-square');
-                    document.querySelector(getDomPath(item).join(" > ") + ' i').classList.add('fa-plus-square');
-                }
-            } else {
-                it.style.display = "list-item";
-                it.removeAttribute("hidden");
-                item.setAttribute("title", "Zwiń tę gałąź");
-                if (!document.querySelector(getDomPath(item).join(" > ") + ' i').classList.contains("fa-folder-open")) {
-                    document.querySelector(getDomPath(item).join(" > ") + ' i').classList.remove('fa-plus-square');
-                    document.querySelector(getDomPath(item).join(" > ") + ' i').classList.add('fa-minus-square');
-                }
-            }
-        })
-        e.stopPropagation();
-    });
-});
-
-function getDomPath(el) {
-    var stack = [];
-    while (el.parentNode != null) {
-        var sibCount = 0;
-        var sibIndex = 0;
-        for (var i = 0; i < el.parentNode.childNodes.length; i++) {
-            var sib = el.parentNode.childNodes[i];
-            if (sib.nodeName == el.nodeName) {
-                if (sib === el) {
-                    sibIndex = sibCount;
-                }
-                sibCount++;
-            }
-        }
-        if (el.hasAttribute('id') && el.id != '') {
-            stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
-        } else if (sibCount > 1) {
-            stack.unshift(el.nodeName.toLowerCase() + ':nth-child(' + (sibIndex + 1) + ')');
-        } else {
-            stack.unshift(el.nodeName.toLowerCase());
-        }
-        el = el.parentNode;
+function drawConnections(connections){
+    var container = document.getElementsByClassName('timeline')[0];
+    var offset = {
+      "x": container.getBoundingClientRect().left - document.body.getBoundingClientRect().left,
+      "y": container.getBoundingClientRect().top - document.body.getBoundingClientRect().top
     }
-
-    return stack.slice(1);
+    var area = {
+      "x": container.getBoundingClientRect().width,
+      "y": container.getBoundingClientRect().height
+    }
+    var max = {
+      "x": parseFloat(container.attributes["posmx"].value),
+      "y": parseInt(container.attributes["posmy"].value)
+    }
+    for(var child of container.children){
+      var x = parseFloat(child.attributes['posx'].value);
+      var y = parseFloat(child.attributes['posy'].value);
+      child.style.left = ((x/max["x"])*area["x"]) + offset['x'] + "px";
+      child.style.top = ((y/max["y"])*area["y"]) + offset['y'] + "px";
+    }
+    console.log('Dupa');
+    console.log(offset);
+    console.log(area);
+    console.log(max);
 }
