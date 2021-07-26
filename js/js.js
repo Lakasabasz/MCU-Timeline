@@ -18,8 +18,5 @@ function drawConnections(connections){
       child.style.left = ((x/max["x"])*area["x"]) + offset['x'] + "px";
       child.style.top = ((y/max["y"])*area["y"]) + offset['y'] + "px";
     }
-    console.log('Dupa');
-    console.log(offset);
-    console.log(area);
-    console.log(max);
+    
 }
