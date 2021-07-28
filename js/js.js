@@ -59,8 +59,7 @@ function drawConnections(connections){
     var id = 0;
     for(var conn of connections){
       if(conn["angle"] === undefined){
-        // Łuki
-      } else {
+        console.log(conn);
         var fn = document.getElementById(conn["between"][0]);
         var fnc = {'x': parseInt(fn.attributes['posx'].value), 'y': parseInt(fn.attributes['posy'].value)};
         var sn = document.getElementById(conn["between"][1]);
@@ -70,6 +69,8 @@ function drawConnections(connections){
         document.getElementById('c' + id).style.left = ((fnc['x']/max["x"])*area["x"]) + offset['x'] + "px";
         document.getElementById('c' + id).style.top = ((fnc['y']/max["y"])*area["y"]) + offset['y'] + "px";
         id += 1;
+      } else {
+        // Łuki
       }
     }
 }
