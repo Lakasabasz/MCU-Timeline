@@ -61,9 +61,9 @@ function drawConnections(connections){
       if(conn["angle"] === undefined){
         // Łuki
       } else {
-        var fn = document.getElemntById(conn["between"][0]);
+        var fn = document.getElementById(conn["between"][0]);
         var fnc = {'x': parseInt(fn.attributes['posx'].value), 'y': parseInt(fn.attributes['posy'].value)};
-        var sn = document.getElemntById(conn["between"][1]);
+        var sn = document.getElementById(conn["between"][1]);
         var snc = {'x': parseInt(sn.attributes['posx'].value), 'y': parseInt(sn.attributes['posy'].value)};
         var html = generateSvgLine(sizePerPx, fnc, snc, id);
         document.getElementById('connectContainer').innerHTML += html;
