@@ -1,21 +1,10 @@
 function generateSvgLine(sizePerPx, firstNodeCoords, secondNodeCoords, id){
   var boxSize = {"x": 0, "y": 0}
   boxSize['x'] = secondNodeCoords['x'] - firstNodeCoords['x'];
-  if(boxSize['x'] == 0) boxSize['x'] = 0.0375;
+  if(boxSize['x'] == 0) boxSize['x'] = 0.25;
   boxSize['y'] = secondNodeCoords['y'] - firstNodeCoords['y'];
-  if(boxSize['y'] == 0) boxSize['y'] = 0.0375;
-  var ret = '<svg style="width: ' + sizePerPx['x'] * boxSize['x'] + 'px; height: ' + sizePerPx['y'] * boxSize['y'] + 'px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 ' + (-1*boxSize['y']) + ' ' + boxSize['x'] + ' ' + boxSize['y'] + '" id="c' + id + '" class="connect">';
-  ret += '<defs>';
-  ret += '<filter id="back1" x="-0.02304" width="1.04608" y="-0.04608" height="1.09216">';
-  ret += '<feGaussianBlur stdDeviation="0.0192" />';
-  ret += '</filter>';
-  ret += '<filter id="med1" x="-0.036" width="1.072" y="-0.072" height="1.144">';
-  ret += '<feGaussianBlur stdDeviation="0.03" />';
-  ret += '</filter>';
-  ret += '<filter id="top1" x="-0.009" width="1.018" y="-0.018" height="1.036">';
-  ret += '<feGaussianBlur stdDeviation="0.0075" />';
-  ret += '</filter>';
-  ret += '</defs>';
+  if(boxSize['y'] == 0) boxSize['y'] = 0.25;
+  var ret = '<svg preserveAspectRatio="none" width=' + sizePerPx['x'] * boxSize['x'] + 'px height=' + sizePerPx['y'] * boxSize['y'] + 'px xmlns="http://www.w3.org/2000/svg" viewBox="0 ' + (-1*boxSize['y'])/2 + ' ' + boxSize['x'] + ' ' + boxSize['y'] + '" id="c' + id + '" class="connect">';
   var normalizedSecond = {'x': 0, 'y': 0};
   if(firstNodeCoords['x'] <= secondNodeCoords['x']){
     normalizedSecond['x'] = secondNodeCoords['x'] - firstNodeCoords['x'];
@@ -25,11 +14,11 @@ function generateSvgLine(sizePerPx, firstNodeCoords, secondNodeCoords, id){
     normalizedSecond['y'] = -1*(firstNodeCoords['y'] - secondNodeCoords['y']);
   }
   ret += '<path d="M 0 0 C 0 0 0 0 ' + normalizedSecond['x'] + ' ' + normalizedSecond['y'] + '" stroke="#00b5ff" stroke-width="0.075" fill="none"';
-  ret += 'style="filter:url(#med1);" />';
+  ret += 'style="filter:blur(0.03px);" />';
   ret += '<path d="M 0 0 C 0 0 0 0 ' + normalizedSecond['x'] + ' ' + normalizedSecond['y'] + '" stroke="#f500ff" stroke-width="0.05" fill="none"';
-  ret += 'style="filter:url(#back1);" />';
+  ret += 'style="filter:blur(0.0192px);" />';
   ret += '<path d="M 0 0 C 0 0 0 0 ' + normalizedSecond['x'] + ' ' + normalizedSecond['y'] + '" stroke="#9eeeff" stroke-width="0.025" fill="none"';
-  ret += 'style="filter:url(#top1);" />';
+  ret += 'style="filter:blur(0.0075px);" />';
   ret += '</svg>';
   return ret;
 }

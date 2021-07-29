@@ -1,66 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg viewBox="0 -1 2 1">
-  <defs id="defs8">
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter1231"
-       x="-0.02304"
-       width="1.04608"
-       y="-0.04608"
-       height="1.09216">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.0192"
-         id="feGaussianBlur1233" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -1 2 1">
+  <defs>
+    <filter id="filter1231">
+      <feGaussianBlur stdDeviation="0.0192"></feGaussianBlur>
     </filter>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter1271"
-       x="-0.036"
-       width="1.072"
-       y="-0.072"
-       height="1.144">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.03"
-         id="feGaussianBlur1273" />
+    <filter style="color-interpolation-filters:sRGB" id="filter1271" x="-0.036" width="1.072" y="-0.072" height="1.144">
+      <feGaussianBlur stdDeviation="0.03" id="feGaussianBlur1273"></feGaussianBlur>
     </filter>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter1287"
-       x="-0.009"
-       width="1.018"
-       y="-0.018"
-       height="1.036">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.0075"
-         id="feGaussianBlur1289" />
+    <filter style="color-interpolation-filters:sRGB" id="filter1287" x="-0.009" width="1.018" y="-0.018" height="1.036">
+      <feGaussianBlur stdDeviation="0.0075" id="feGaussianBlur1289"></feGaussianBlur>
     </filter>
   </defs>
-  <path
-     d="M 0 0 C 0 0 1 0 2 -1"
-     stroke="#FF0000"
-     stroke-width="0.05"
-     fill="none"
-     id="path2"
-     style="stroke:#00b5ff;stroke-opacity:1;filter:url(#filter1271);stroke-width:0.075;stroke-miterlimit:4;stroke-dasharray:none" />
-  <path
-     d="M 0 0 C 0 0 1 0 2 -1"
-     stroke="#FF0000"
-     stroke-width="0.05"
-     fill="none"
-     id="path839"
-     style="stroke:#f500ff;stroke-opacity:1;filter:url(#filter1231)" />
-  <path
-     d="M 0,0 C 0,0 1,0 2,-1"
-     stroke="#ff0000"
-     stroke-width="0.05"
-     fill="none"
-     id="path841"
-     style="stroke-width:0.025;stroke-miterlimit:4;stroke-dasharray:none;stroke:#9eeeff;stroke-opacity:1;filter:url(#filter1287);opacity:0.99799998"
-     sodipodi:insensitive="true" />
+  <path d="M 0 0 C 0 0 1 0 2 -1" stroke="#00b5ff" stroke-width="0.075" fill="none" style="filter:url(#filter1271);"></path>
+  <path d="M 0 0 C 0 0 1 0 2 -1" stroke="#f500ff" stroke-width="0.05" fill="none" style="filter:url(#filter1231)"></path>
+  <path d="M 0 0 C 0 0 1 0 2 -1" stroke="#9eeeff" stroke-width="0.025" fill="none" style="filter:url(#filter1287);"></path>
 </svg>
