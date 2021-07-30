@@ -1,24 +1,36 @@
 function generateSvgLine(sizePerPx, firstNodeCoords, secondNodeCoords, id){
   var boxSize = {"x": 0, "y": 0}
   boxSize['x'] = secondNodeCoords['x'] - firstNodeCoords['x'];
-  if(boxSize['x'] == 0) boxSize['x'] = 0.25;
   boxSize['y'] = secondNodeCoords['y'] - firstNodeCoords['y'];
-  if(boxSize['y'] == 0) boxSize['y'] = 0.25;
-  var ret = '<svg preserveAspectRatio="none" width=' + sizePerPx['x'] * boxSize['x'] + 'px height=' + sizePerPx['y'] * boxSize['y'] + 'px xmlns="http://www.w3.org/2000/svg" viewBox="0 ' + (-1*boxSize['y'])/2 + ' ' + boxSize['x'] + ' ' + boxSize['y'] + '" id="c' + id + '" class="connect">';
+  var width, height, viewbox;
+  if(boxSize['x'] == 0) {
+    boxSize['x'] = 0.25;
+    width = sizePerPx['x'] * boxSize['x'] + 'px';
+    height = sizePerPx['y'] * boxSize['y'] + 'px';
+    viewbox = '0 ' + (-1*boxSize['y'])/2 + ' ' + boxSize['x'] + ' ' + boxSize['y'];
+  } else if (boxSize['y'] == 0) {
+    boxSize['y'] = 0.25;
+    width = sizePerPx['x'] * boxSize['x'] + 'px';
+    height = sizePerPx['y'] * boxSize['y'] + 'px';
+    viewbox = '0 ' + (-1*boxSize['y'])/2 + ' ' + boxSize['x'] + ' ' + boxSize['y'];
+  } else{
+    width = sizePerPx['x'] * boxSize['x'] + 'px';
+    height = sizePerPx['y'] * boxSize['y'] + 'px';
+    viewbox = '0 ' + (-1*boxSize['y'])/2 + ' ' + boxSize['x'] + ' ' + boxSize['y'];
+  }
+  if(boxSize['y'] == 0) ;
+  var ret = '<svg preserveAspectRatio="none" width=' + width + ' height=' + height + ' xmlns="http://www.w3.org/2000/svg" viewBox="' + viewBox + '" id="c' + id + '" class="connect">';
   var normalizedSecond = {'x': 0, 'y': 0};
   if(firstNodeCoords['x'] <= secondNodeCoords['x']){
     normalizedSecond['x'] = secondNodeCoords['x'] - firstNodeCoords['x'];
-    normalizedSecond['y'] = -1*(secondNodeCoords['y'] - firstNodeCoords['y']);
+    normalizedSecond['y'] = (secondNodeCoords['y'] - firstNodeCoords['y']);
   } else{
     normalizedSecond['x'] = firstNodeCoords['x'] - secondNodeCoords['x'];
-    normalizedSecond['y'] = -1*(firstNodeCoords['y'] - secondNodeCoords['y']);
+    normalizedSecond['y'] = (firstNodeCoords['y'] - secondNodeCoords['y']);
   }
-  ret += '<path d="M 0 0 C 0 0 0 0 ' + normalizedSecond['x'] + ' ' + normalizedSecond['y'] + '" stroke="#00b5ff" stroke-width="0.075" fill="none"';
-  ret += 'style="filter:blur(0.03px);" />';
-  ret += '<path d="M 0 0 C 0 0 0 0 ' + normalizedSecond['x'] + ' ' + normalizedSecond['y'] + '" stroke="#f500ff" stroke-width="0.05" fill="none"';
-  ret += 'style="filter:blur(0.0192px);" />';
-  ret += '<path d="M 0 0 C 0 0 0 0 ' + normalizedSecond['x'] + ' ' + normalizedSecond['y'] + '" stroke="#9eeeff" stroke-width="0.025" fill="none"';
-  ret += 'style="filter:blur(0.0075px);" />';
+  ret += '<path d="M 0 0 C 0 0 0 0 ' + normalizedSecond['x'] + ' ' + normalizedSecond['y'] + '" stroke="#00b5ff" stroke-width="0.075" fill="none" />';
+  ret += '<path d="M 0 0 C 0 0 0 0 ' + normalizedSecond['x'] + ' ' + normalizedSecond['y'] + '" stroke="#f500ff" stroke-width="0.05" fill="none" />';
+  ret += '<path d="M 0 0 C 0 0 0 0 ' + normalizedSecond['x'] + ' ' + normalizedSecond['y'] + '" stroke="#9eeeff" stroke-width="0.025" fill="none" />';
   ret += '</svg>';
   return ret;
 }

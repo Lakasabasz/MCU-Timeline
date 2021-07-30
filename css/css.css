@@ -27,3 +27,13 @@ div>div{
 .connect{
   position: absolute;
 }
+
+svg path:nth-child(1){
+  filter:blur(0.03px);
+}
+svg path:nth-child(2){
+  filter:blur(0.0192px);
+}
+svg path:nth-child(3){
+  filter:blur(0.0075px);
+}
