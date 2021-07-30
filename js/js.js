@@ -19,7 +19,7 @@ function generateSvgLine(sizePerPx, firstNodeCoords, secondNodeCoords, id){
     viewbox = '0 ' + (-1*boxSize['y'])/2 + ' ' + boxSize['x'] + ' ' + boxSize['y'];
   }
   if(boxSize['y'] == 0) ;
-  var ret = '<svg preserveAspectRatio="none" width=' + width + ' height=' + height + ' xmlns="http://www.w3.org/2000/svg" viewBox="' + viewBox + '" id="c' + id + '" class="connect">';
+  var ret = '<svg preserveAspectRatio="none" width=' + width + ' height=' + height + ' xmlns="http://www.w3.org/2000/svg" viewBox="' + viewbox + '" id="c' + id + '" class="connect">';
   var normalizedSecond = {'x': 0, 'y': 0};
   if(firstNodeCoords['x'] <= secondNodeCoords['x']){
     normalizedSecond['x'] = secondNodeCoords['x'] - firstNodeCoords['x'];
