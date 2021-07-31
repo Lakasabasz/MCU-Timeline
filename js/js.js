@@ -40,7 +40,7 @@ function generateSvgLine(sizePerPx, firstNodeCoords, secondNodeCoords, id) {
   </svg>`;
 }
 
-function generateSvgAnchor(sizePerPx, firstNodeCoords, secondNodeCoords, id) {
+function generateSvgCurve(sizePerPx, firstNodeCoords, secondNodeCoords, id) {
   var boxSize = {
     "x": 0,
     "y": 0
@@ -151,7 +151,7 @@ function drawConnections(connections) {
         "x": parseInt(sn.attributes['posx'].value),
         "y": parseInt(sn.attributes['posy'].value)
       };
-      var html = generateSvgAnchor(sizePerPx, fnc, snc, id);
+      var html = generateSvgCurve(sizePerPx, fnc, snc, id);
       document.querySelector('#connectContainer').innerHTML += html;
       let aID_styles = document.querySelector(`#a${id}`).style;
       aID_styles.left = `${((fnc["x"] / max["x"]) * area["x"]) + offset["x"] + 4.3}px`;
