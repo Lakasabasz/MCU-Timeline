@@ -127,3 +127,5 @@ dist
 .eslintrc.js
 package-lock.json
 package.json
+
+.idea
