@@ -1,4 +1,5 @@
 import {initShaderProgram} from './shader.js';
+//import {glMatrix} from './gl-matrix-min.js';
 
 function main(){
   const canvas = document.getElementsByTagName("canvas")[0];
@@ -20,7 +21,7 @@ function main(){
 
 function rect(x, y, w, h){
   return [
-    x, y,
+    x+0.1, y+0.1,
     x, y+h,
     x+w, y,
     x+w, y+h
@@ -55,13 +56,20 @@ function drawScene(gl, programInfo, buffers){
   gl.enableVertexAttribArray(programInfo.attribLocation.vertexPosition);
 
   gl.useProgram(programInfo.program);
-
+  console.log(programInfo.uniformLocation);
   gl.uniformMatrix4fv(programInfo.uniformLocation.projectionMatrix, false, projectionMatrix);
+  gl.uniform1i(programInfo.uniformLocation.othercolor, true);
+  gl.uniform1i(programInfo.uniformLocation.ubool, false);
+  let kolor = glMatrix.vec4.create();
+  kolor[0] = 1.0;
+  kolor[1] = 0.5;
+  kolor[3] = 1.0;
+
+  gl.uniform4fv(programInfo.uniformLocation.setcolor, kolor);
 
   const offset = 0;
   const vertexCount = 4;
   gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
-  console.log(gl.error());
 }
 
 window.onload=main;
