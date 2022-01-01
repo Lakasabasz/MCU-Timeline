@@ -50,10 +50,10 @@ def fsolve(x1, y1, y2, y3, a=0.00001, eps=0.001):
 
 if __name__ == "__main__":
     # Funkcja od (0, 0) do
-    P1 = (1, 3)
+    P1 = (1, 2)
 
     # Z pochodną w x=0
-    dx0 = 0
+    dx0 = 1
 
     # Z pochodną w P1
     dx1 = 0
