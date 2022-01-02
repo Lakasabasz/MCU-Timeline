@@ -21,7 +21,7 @@ function main(){
 
 function rect(x, y, w, h){
   return [
-    x+0.1, y+0.1,
+    x, y,
     x, y+h,
     x+w, y,
     x+w, y+h
@@ -44,11 +44,9 @@ function drawScene(gl, programInfo, buffers){
   gl.clear(gl.COLOR_BUFFER_BIT);
 
   const projectionMatrix = glMatrix.mat4.create();
-  const fov = 45 * Math.PI / 180;
-  const aspect = gl.canvas.clientWidth/gl.canvas.clientHeight;
   const zNear = 0.1;
   const zFar = 100.0;
-  glMatrix.mat4.perspective(projectionMatrix, fov, aspect, zNear, zFar);
+  glMatrix.mat4.ortho(projectionMatrix, -gl.canvas.clientWidth/200, gl.canvas.clientWidth/200, -gl.canvas.clientHeight/200, gl.canvas.clientHeight/200, zNear, zFar);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
   const coordsPerVertex = 2
@@ -57,7 +55,8 @@ function drawScene(gl, programInfo, buffers){
 
   gl.useProgram(programInfo.program);
   console.log(programInfo.uniformLocation);
-  gl.uniformMatrix4fv(programInfo.uniformLocation.projectionMatrix, false, projectionMatrix);
+  console.log(projectionMatrix);
+  gl.uniformMatrix4fv(programInfo.uniformLocation.pMatrix, false, projectionMatrix);
   gl.uniform1i(programInfo.uniformLocation.othercolor, true);
   gl.uniform1i(programInfo.uniformLocation.ubool, false);
   let kolor = glMatrix.vec4.create();

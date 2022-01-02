@@ -18,7 +18,7 @@ void main(){
     vertexColor = setColor;
   }
   useVertexPaint = 1;
-  gl_Position = pMatrix * vec4(pos_in, 1.0);
+  gl_Position = vec4(pos_in, 1.0) * pMatrix;
 }
 `;
 
