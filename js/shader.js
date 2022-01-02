@@ -4,18 +4,15 @@ in vec3 pos_in;
 flat out int useVertexPaint;
 out vec4 vertexColor;
 
-uniform bool uBool;
-uniform vec4 setColor;
+uniform bool enableVertexPainting;
+uniform vec4 vertexPaintColor;
 uniform mat4 pMatrix;
 
 void main(){
-  if(uBool){
-    if(pos_in.x > 0.0 && pos_in.y > 0.0) vertexColor = vec4(1.0, 0.0, 0.0, 1.0);
-    else if(pos_in.x < 0.0 && pos_in.y > 0.0) vertexColor = vec4(0.0, 1.0, 0.0, 1.0);
-    else if(pos_in.x > 0.0 && pos_in.y < 0.0) vertexColor = vec4(0.0, 0.0, 1.0, 1.0);
-    else vertexColor = vec4(1.0, 1.0, 1.0, 1.0);
+  if(!enableVertexPainting){
+    vertexColor = vec4(0.0, 0.5, 1.0, 1.0);
   } else{
-    vertexColor = setColor;
+    vertexColor = vertexPaintColor;
   }
   useVertexPaint = 1;
   gl_Position = vec4(pos_in, 1.0) * pMatrix;
@@ -29,12 +26,8 @@ in vec4 vertexColor;
 
 out vec4 color_out;
 
-uniform bool othercolor;
-
 void main(){
-  if(useVertexPaint == 1) color_out = vertexColor;
-  else if(othercolor) color_out = vec4(0.0, 1.0, 0.0, 1.0);
-  else color_out = vec4(1.0, 1.0, 1.0, 1.0);
+  color_out = vertexColor;
 }
 `;
 
@@ -58,10 +51,10 @@ export function initShaderProgram(gl){
       vertexPosition: gl.getAttribLocation(program, 'pos_in')
     },
     uniformLocation: {
+      // Vertex Shader
+      enableVertexPainting: gl.getUniformLocation(program, 'enableVertexPainting'),
       pMatrix: gl.getUniformLocation(program, 'pMatrix'),
-      othercolor: gl.getUniformLocation(program, 'othercolor'),
-      ubool: gl.getUniformLocation(program, 'uBool'),
-      setcolor: gl.getUniformLocation(program, 'setColor')
+      vertexPaintColor: gl.getUniformLocation(program, 'vertexPaintColor')
     }
   };
 }

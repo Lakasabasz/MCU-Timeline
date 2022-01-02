@@ -1,5 +1,7 @@
 import {initShaderProgram} from './shader.js';
-//import {glMatrix} from './gl-matrix-min.js';
+import * as glMatrix from './gl-matrix/index.js';
+
+console.log(glMatrix);
 
 function main(){
   const canvas = document.getElementsByTagName("canvas")[0];
@@ -59,12 +61,10 @@ function drawScene(gl, programInfo, buffers){
   gl.uniformMatrix4fv(programInfo.uniformLocation.pMatrix, false, projectionMatrix);
   gl.uniform1i(programInfo.uniformLocation.othercolor, true);
   gl.uniform1i(programInfo.uniformLocation.ubool, false);
-  let kolor = glMatrix.vec4.create();
-  kolor[0] = 1.0;
-  kolor[1] = 0.5;
-  kolor[3] = 1.0;
+  let kolor = [1.0, 0.5, 0.0, 1.0];
 
-  gl.uniform4fv(programInfo.uniformLocation.setcolor, kolor);
+  gl.uniform1i(programInfo.uniformLocation.enableVertexPainting, true);
+  gl.uniform4fv(programInfo.uniformLocation.vertexPaintColor, kolor);
 
   const offset = 0;
   const vertexCount = 4;
