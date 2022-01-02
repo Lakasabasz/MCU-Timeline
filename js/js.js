@@ -16,7 +16,20 @@ function main(){
 
   const shaderProgram = initShaderProgram(gl);
 
-  const buffers = initBuffers(gl);
+  const buffers = [
+    createBuffer(gl, [
+      -1.0, 0.0,
+      -1.0, 1.0,
+      0.0, 0.66,
+      0.0, 0.33,
+      -1.0, 0.0,
+      1.0, 1.0,
+      0.0, 0.66,
+      1.0, 0.0,
+      0.0, 0.33
+    ], [1.0, .0, .0, 1.0]),
+    createBuffer(gl, rect(-1.0, -1.0, 2.0, 0.5), [1.0, 0.5, 0.0, 1.0])
+  ];
 
   drawScene(gl, shaderProgram, buffers);
 }
@@ -30,45 +43,64 @@ function rect(x, y, w, h){
   ];
 }
 
-function initBuffers(gl){
+function createBuffer(gl, pointList = rect(-0.5, -0.5, 1.0, 1.0), vertexPaintColor = null){
   const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-  const positions = rect(-0.5, -0.5, 1.0, 1.0);
+  const positions = pointList;
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-  return {position: positionBuffer}
+  return {
+    position: positionBuffer,
+    valuesPerVertex: 2,
+    vertexPaintColor: vertexPaintColor,
+    offset: 0,
+    vertexCount: pointList.length/2
+  };
+}
+
+function clearScreen(gl, color=[.0, .0, .0, 1.0]){
+  gl.clearColor(...color);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+}
+
+/**
+* @param {int} canvasWidth in pixels
+* @param {int} canvasHeight in pixels
+* @param {float} centerX shift in screen independent coords
+* @param {float} centerY shift in screen independent coords
+**/
+function createIsometricProjection(canvasWidth, canvasHeight, centerX = .0, centerY = .0, near = 0.1, far = 100){
+  const projectionMatrix = glMatrix.mat4.create();
+  glMatrix.mat4.ortho(projectionMatrix,
+                      (-canvasWidth/200.0)+centerX, (canvasWidth/200.0)+centerX,
+                      (-canvasHeight/200.0)+centerY, (canvasHeight/200.0)+centerY,
+                      near, far);
+  return projectionMatrix;
 }
 
 function drawScene(gl, programInfo, buffers){
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
-
-  const projectionMatrix = glMatrix.mat4.create();
-  const zNear = 0.1;
-  const zFar = 100.0;
-  glMatrix.mat4.ortho(projectionMatrix, -gl.canvas.clientWidth/200, gl.canvas.clientWidth/200, -gl.canvas.clientHeight/200, gl.canvas.clientHeight/200, zNear, zFar);
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-  const coordsPerVertex = 2
-  gl.vertexAttribPointer(programInfo.attribLocation.vertexPosition, coordsPerVertex, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(programInfo.attribLocation.vertexPosition);
+  clearScreen(gl);
 
   gl.useProgram(programInfo.program);
-  console.log(programInfo.uniformLocation);
-  console.log(projectionMatrix);
+  const projectionMatrix = createIsometricProjection(gl.canvas.width, gl.canvas.height);
   gl.uniformMatrix4fv(programInfo.uniformLocation.pMatrix, false, projectionMatrix);
-  gl.uniform1i(programInfo.uniformLocation.othercolor, true);
-  gl.uniform1i(programInfo.uniformLocation.ubool, false);
-  let kolor = [1.0, 0.5, 0.0, 1.0];
 
-  gl.uniform1i(programInfo.uniformLocation.enableVertexPainting, true);
-  gl.uniform4fv(programInfo.uniformLocation.vertexPaintColor, kolor);
+  for(const buffer of buffers){
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.position);
+    gl.vertexAttribPointer(programInfo.attribLocation.vertexPosition, buffer.valuesPerVertex, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(programInfo.attribLocation.vertexPosition);
 
-  const offset = 0;
-  const vertexCount = 4;
-  gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+    if(buffer.vertexPaintColor !== null){
+      gl.uniform1i(programInfo.uniformLocation.enableVertexPainting, true);
+      gl.uniform4fv(programInfo.uniformLocation.vertexPaintColor, buffer.vertexPaintColor);
+    }
+
+    const offset = buffer.offset;
+    const vertexCount = buffer.vertexCount;
+    gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+  }
 }
 
 window.onload=main;
