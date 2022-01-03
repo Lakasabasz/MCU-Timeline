@@ -31,9 +31,8 @@ def fsolve(x1, y1, y2, y3, a=0.00001, eps=0.001):
     b = 2*np.pi/x1
     mid = 0
     fmid = 0
-    goodmatch = True
     if f(a, *argset) * f(b, *argset) > 0:
-        goodmatch = False
+        print('Cannot fully solve')
 
     while not b-a < eps:
         mid = (a + b) / 2
@@ -44,7 +43,7 @@ def fsolve(x1, y1, y2, y3, a=0.00001, eps=0.001):
             b = mid
         else:
             return mid
-    print(mid, fmid)
+    print("Dokładność x = f(x)", mid, fmid)
     return (a+b)/2
 
 
@@ -58,14 +57,14 @@ if __name__ == "__main__":
     # Z pochodną w P1
     dx1 = 1
 
-    f0 = fsolve(P1[0], P1[1], dx0, dx1)
+    f0 = fsolve(P1[0], P1[1], dx0, dx1, eps=10**(-3))
     h0 = h(f0, P1[0], P1[1], dx0, dx1)
     a0 = a(f0, h0, P1[0], P1[1])
     v0 = v(a0, h0)
 
-    print(f0, h0, a0, v0)
+    print("Współczynniki", f0, h0, a0, v0)
 
-    r = 0.1
+    r = 10**(-3)
 
     Xvals, Yvals = [0], [0]
     while Xvals[-1] < P1[0]:
@@ -79,6 +78,10 @@ if __name__ == "__main__":
     Xvals.append(P1[0])
     Yvals.append(a0*np.sin(f0*P1[0]-h0)+v0)
 
-    plt.plot(Xvals, Yvals, 'o', [0, P1[0]], [0, P1[1]], 'o')
-    plt.grid(True)
-    plt.show()
+    dP0 = (Yvals[1]-Yvals[0])/(Xvals[1]-Xvals[0])
+    dP1 = (Yvals[-1]-Yvals[-2])/(Xvals[-1]-Xvals[-2])
+    print("Pochodne", dP0, dP1)
+
+    #plt.plot(Xvals, Yvals, 'o', [0, P1[0]], [0, P1[1]], 'o')
+    #plt.grid(True)
+    #plt.show()

@@ -126,9 +126,10 @@ function arc(){
 
   // Obliczamy punkty dla funkcji
   let points = genSpline(functionSettings, 0.1);
+  console.log(points);
 
   // Obliczamy wierzchołki trójkątów
-  let width = 0.1/2;
+  let width = 0.05/2;
   let vertexes = [];
 
   for(const p of points){
