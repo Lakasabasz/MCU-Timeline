@@ -113,15 +113,22 @@ function arc(){
   */
 
   // Obliczamy współczynniki dla sinusa
-  let f0 = fsolve(1, 1, 0, 1);
-  let h0 = h(f0, 1, 1, 0, 1);
-  let a0 = a(f0, h0, 1, 1);
+  const p0x = 0.0;
+  const p0y = 0.0;
+  const dp0 = 0.0;
+  const p1x = 1.5;
+  const p1y = 1.0;
+  const dp1 = 1.0;
+
+  let f0 = fsolve(p1x, p1y, dp0, dp1);
+  let h0 = h(f0, p1x, p1y, dp0, dp1);
+  let a0 = a(f0, h0, p1x, p1y);
   let v0 = v(a0, h0);
 
   const functionSettings = [
-    {'linear': true, 'x0': -2, 'y0': 0, 'a': 0, 'x1': 0},
-    {'linear': false, 'x0': 0, 'y0': 0, 'a': a0, 'f': f0, 'h': h0, 'v': v0, 'x1': 1},
-    {'linear': true, 'x0': 1, 'y0': 1, 'a': 1, 'x1': 2}
+    {'linear': true, 'x0': -2, 'y0': 0, 'a': dp0, 'x1': p0x},
+    {'linear': false, 'x0': p0x, 'y0': p0y, 'a': a0, 'f': f0, 'h': h0, 'v': v0, 'x1': p1x},
+    {'linear': true, 'x0': p1x, 'y0': p1y, 'a': dp1, 'x1': 2}
   ];
 
   // Obliczamy punkty dla funkcji
