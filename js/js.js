@@ -1,4 +1,6 @@
 import {initShaderProgram} from './shader.js';
+//import {rect} from './shapes.js';
+import {createBuffer, drawScene} from './wgl-tools.js';
 import * as glMatrix from './gl-matrix/index.js';
 
 console.log(glMatrix);
@@ -16,91 +18,151 @@ function main(){
 
   const shaderProgram = initShaderProgram(gl);
 
+  const timeline = arc();
+  console.log(timeline);
+
   const buffers = [
-    createBuffer(gl, [
-      -1.0, 0.0,
-      -1.0, 1.0,
-      0.0, 0.66,
-      0.0, 0.33,
-      -1.0, 0.0,
-      1.0, 1.0,
-      0.0, 0.66,
-      1.0, 0.0,
-      0.0, 0.33
-    ], [1.0, .0, .0, 1.0]),
-    createBuffer(gl, rect(-1.0, -1.0, 2.0, 0.5), [1.0, 0.5, 0.0, 1.0])
+    createBuffer(gl, timeline, [0.0, 2.0/3, 1.0, 1.0])
   ];
 
   drawScene(gl, shaderProgram, buffers);
 }
 
-function rect(x, y, w, h){
-  return [
-    x, y,
-    x, y+h,
-    x+w, y,
-    x+w, y+h
+function f(x, x1, y1, y2, y3){
+  const l = -y1*x*Math.cos(Math.atan((y2-y3)/(x*y1)) - (x*x1)/2);
+  const m = 2*Math.sin((-x*x1)/2)*Math.cos(Math.atan((y2-y3)/(x*y1)));
+  return l/m - y2;
+}
+
+function fsolve(x1, y1, y2, y3, a=0.000001, eps=0.001){
+  if(x1 == 0 || y1 == 0){
+    console.error("x1 == 0 || y1 == 0");
+    return null;
+  }
+
+  let argset = [x1, y1, y2, y3];
+  let b = 2*Math.PI/x1;
+  let mid = 0;
+  let fmid = 0;
+  if(f(a, ...argset) * f(b, ...argset) > 0){
+    console.warn(...argset);
+    console.warn("Cannot fully solve f");
+  }
+  while(b-a >= eps){
+    mid = (a+b)/2;
+    fmid = f(mid, ...argset);
+    if(fmid > 0) a = mid;
+    else if (fmid < 0) b = mid;
+    else return mid;
+  }
+  return (a+b)/2;
+}
+
+function h(f0, x1, y1, y2, y3){
+  return -(Math.atan((y2-y3)/(f0*y1))-(f0*x1)/2);
+}
+
+function a(f0, h0, x1, y1){
+  return -y1/(Math.sin(-h0) - Math.sin(f0*x1-h0));
+}
+
+function v(a0, h0){
+  return -a0*Math.sin(-h0);
+}
+
+function arcSin(x, a0, f0, h0, v0){
+  return a0*Math.sin(x*f0-h0) + v0;
+}
+
+function dArcSin(x, a0, f0, h0){
+  return a0*f0*Math.cos(f0*x-h0);
+}
+
+// <x0, x1>, linear: bool,
+function genSpline(funcList, next = 0.01){
+  let points = [];
+  for(const fdata of funcList){
+    if(fdata['linear']){
+      let x = fdata['x0'];
+      let alfa = Math.atan(fdata['a']);
+      let step = next * Math.cos(alfa);
+      let b = fdata['y0'] - fdata['a']*x;
+      while(x < fdata['x1']){
+        points.push([x, fdata['a']*x+b]);
+        x += step;
+      }
+    } else{
+      let shiftVector = [fdata['x0'], fdata['y0']];
+      let x1 = fdata['x1']-fdata['x0'];
+      let x = 0.0;
+      while(x < x1){
+        points.push([x + shiftVector[0], arcSin(x, fdata['a'], fdata['f'], fdata['h'], fdata['v']) + shiftVector[1]]);
+        let alfa = Math.atan(dArcSin(x, fdata['a'], fdata['f'], fdata['h']));
+        let step = next * Math.cos(alfa);
+        x += step;
+      }
+    }
+  }
+  return points;
+}
+
+function arc(){
+  /* y=0 dla <-2; 0)
+  *  y=asin(fx-h)+v dla <0; 1>
+  *  y=x dla (1; 2)
+  */
+
+  // Obliczamy współczynniki dla sinusa
+  let f0 = fsolve(1, 1, 0, 1);
+  let h0 = h(f0, 1, 1, 0, 1);
+  let a0 = a(f0, h0, 1, 1);
+  let v0 = v(a0, h0);
+
+  const functionSettings = [
+    {'linear': true, 'x0': -2, 'y0': 0, 'a': 0, 'x1': 0},
+    {'linear': false, 'x0': 0, 'y0': 0, 'a': a0, 'f': f0, 'h': h0, 'v': v0, 'x1': 1},
+    {'linear': true, 'x0': 1, 'y0': 1, 'a': 1, 'x1': 2}
   ];
-}
 
-function createBuffer(gl, pointList = rect(-0.5, -0.5, 1.0, 1.0), vertexPaintColor = null){
-  const positionBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  // Obliczamy punkty dla funkcji
+  let points = genSpline(functionSettings, 0.1);
 
-  const positions = pointList;
+  // Obliczamy wierzchołki trójkątów
+  let width = 0.1/2;
+  let vertexes = [];
 
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-  return {
-    position: positionBuffer,
-    valuesPerVertex: 2,
-    vertexPaintColor: vertexPaintColor,
-    offset: 0,
-    vertexCount: pointList.length/2
-  };
-}
-
-function clearScreen(gl, color=[.0, .0, .0, 1.0]){
-  gl.clearColor(...color);
-  gl.clear(gl.COLOR_BUFFER_BIT);
-}
-
-/**
-* @param {int} canvasWidth in pixels
-* @param {int} canvasHeight in pixels
-* @param {float} centerX shift in screen independent coords
-* @param {float} centerY shift in screen independent coords
-**/
-function createIsometricProjection(canvasWidth, canvasHeight, centerX = .0, centerY = .0, near = 0.1, far = 100){
-  const projectionMatrix = glMatrix.mat4.create();
-  glMatrix.mat4.ortho(projectionMatrix,
-                      (-canvasWidth/200.0)+centerX, (canvasWidth/200.0)+centerX,
-                      (-canvasHeight/200.0)+centerY, (canvasHeight/200.0)+centerY,
-                      near, far);
-  return projectionMatrix;
-}
-
-function drawScene(gl, programInfo, buffers){
-  clearScreen(gl);
-
-  gl.useProgram(programInfo.program);
-  const projectionMatrix = createIsometricProjection(gl.canvas.width, gl.canvas.height);
-  gl.uniformMatrix4fv(programInfo.uniformLocation.pMatrix, false, projectionMatrix);
-
-  for(const buffer of buffers){
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.position);
-    gl.vertexAttribPointer(programInfo.attribLocation.vertexPosition, buffer.valuesPerVertex, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(programInfo.attribLocation.vertexPosition);
-
-    if(buffer.vertexPaintColor !== null){
-      gl.uniform1i(programInfo.uniformLocation.enableVertexPainting, true);
-      gl.uniform4fv(programInfo.uniformLocation.vertexPaintColor, buffer.vertexPaintColor);
+  for(const p of points){
+    let func=null;
+    for(const fSet of functionSettings){
+      if(fSet['x0'] <= p[0] && p[0] <= fSet['x1']){
+        func = fSet;
+        break;
+      }
     }
 
-    const offset = buffer.offset;
-    const vertexCount = buffer.vertexCount;
-    gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+    if(func['linear']){
+      if(func['a'] == 0){
+        vertexes = vertexes.concat([p[0], p[1]+width]);
+        vertexes = vertexes.concat([p[0], p[1]-width]);
+      } else{
+        let alfa = Math.atan(-1/func['a']);
+        vertexes = vertexes.concat([p[0] + width*Math.cos(alfa), p[1] + width*Math.sin(alfa)]);
+        vertexes = vertexes.concat([p[0] - width*Math.cos(alfa), p[1] - width*Math.sin(alfa)]);
+      }
+    } else{
+      let a = dArcSin(p[0], func['a'], func['f'], func['h']);
+      if(a == 0){
+        vertexes = vertexes.concat([p[0], p[1]+width]);
+        vertexes = vertexes.concat([p[0], p[1]-width]);
+      } else{
+        let alfa = Math.atan(-1/a);
+        vertexes = vertexes.concat([p[0] + width*Math.cos(alfa), p[1] + width*Math.sin(alfa)]);
+        vertexes = vertexes.concat([p[0] - width*Math.cos(alfa), p[1] - width*Math.sin(alfa)]);
+      }
+    }
   }
+
+  return vertexes;
 }
 
 window.onload=main;

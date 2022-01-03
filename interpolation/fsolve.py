@@ -50,18 +50,20 @@ def fsolve(x1, y1, y2, y3, a=0.00001, eps=0.001):
 
 if __name__ == "__main__":
     # Funkcja od (0, 0) do
-    P1 = (1, 2)
+    P1 = (1, 1)
 
     # Z pochodną w x=0
-    dx0 = 1
+    dx0 = 0
 
     # Z pochodną w P1
-    dx1 = 0
+    dx1 = 1
 
     f0 = fsolve(P1[0], P1[1], dx0, dx1)
     h0 = h(f0, P1[0], P1[1], dx0, dx1)
     a0 = a(f0, h0, P1[0], P1[1])
     v0 = v(a0, h0)
+
+    print(f0, h0, a0, v0)
 
     r = 0.1
 
