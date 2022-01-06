@@ -1,9 +1,43 @@
-import {initShaderProgram} from './shader.js';
-//import {rect} from './shapes.js';
 import {createBuffer, drawScene} from './wgl-tools.js';
-import * as glMatrix from './gl-matrix/index.js';
+import {MCUTimeline} from './mcutimeline.js';
+import * as simpleShader from './shaders/simpleshader.js';
+import {TimelineType} from './timelinetypes.js';
 
-console.log(glMatrix);
+let mcutimeline = null;
+
+let setupdata = {
+  shaders: [
+    {vCode: simpleShader.vertShader, fCode: simpleShader.fragShader, info: simpleShader.shaderInfo, name: "simple"}
+  ],
+  timelines:[
+    {
+      description: {
+        type: TimelineType.COMPLEX,
+        shader: "simple",
+        selected: false,
+        width: 1.0/100,
+        subnodes: [
+          {x: -1.0, msg: 'Punkt A'},
+          {x: 0.0, msg: 'Punkt B'}
+        ],
+        name: "test"
+      },
+      completefunction: [
+        {x: -2.0, y: 0.0, d: 0.0},
+        {type: "linear"},
+        {x: -1.0, y: 0.0, d: 0.0},
+        {type: "sinus"},
+        {x: 0.5, y: 1.0, d: 1.0},
+        {type: "linear"},
+        {x: 2.5, y: 3.0, d: 1.0}
+      ]
+    }
+  ]
+};
+
+function load(){
+  mcutimeline = new MCUTimeline("canvas", setupdata);
+}
 
 function main(){
   const canvas = document.getElementsByTagName("canvas")[0];
@@ -15,6 +49,8 @@ function main(){
   } else {
     console.log('WebGL initialized ' + gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
   }
+
+  wglcore.loadShader(simpleShader.vertShader, simpleShader.fragShader, simpleShader.shaderInfo, "simple");
 
   const shaderProgram = initShaderProgram(gl);
 
@@ -148,29 +184,24 @@ function arc(){
       }
     }
 
+    let a = null;
     if(func['linear']){
-      if(func['a'] == 0){
-        vertexes = vertexes.concat([p[0], p[1]+width]);
-        vertexes = vertexes.concat([p[0], p[1]-width]);
-      } else{
-        let alfa = Math.atan(-1/func['a']);
-        vertexes = vertexes.concat([p[0] + width*Math.cos(alfa), p[1] + width*Math.sin(alfa)]);
-        vertexes = vertexes.concat([p[0] - width*Math.cos(alfa), p[1] - width*Math.sin(alfa)]);
-      }
+      a = func['a'];
     } else{
-      let a = dArcSin(p[0], func['a'], func['f'], func['h']);
-      if(a == 0){
-        vertexes = vertexes.concat([p[0], p[1]+width]);
-        vertexes = vertexes.concat([p[0], p[1]-width]);
-      } else{
-        let alfa = Math.atan(-1/a);
-        vertexes = vertexes.concat([p[0] + width*Math.cos(alfa), p[1] + width*Math.sin(alfa)]);
-        vertexes = vertexes.concat([p[0] - width*Math.cos(alfa), p[1] - width*Math.sin(alfa)]);
-      }
+      a = dArcSin(p[0], func['a'], func['f'], func['h']);
+    }
+
+    if(a == 0){
+      vertexes = vertexes.concat([p[0], p[1]+width]);
+      vertexes = vertexes.concat([p[0], p[1]-width]);
+    } else{
+      let alfa = Math.atan(-1/a);
+      vertexes = vertexes.concat([p[0] + width*Math.cos(alfa), p[1] + width*Math.sin(alfa)]);
+      vertexes = vertexes.concat([p[0] - width*Math.cos(alfa), p[1] - width*Math.sin(alfa)]);
     }
   }
 
   return vertexes;
 }
 
-window.onload=main;
+window.onload=load;

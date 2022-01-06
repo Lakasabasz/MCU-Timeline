@@ -49,13 +49,13 @@ def fsolve(x1, y1, y2, y3, a=0.00001, eps=0.001):
 
 if __name__ == "__main__":
     # Funkcja od (0, 0) do
-    P1 = (1, 1)
+    P1 = (1, -1)
 
     # Z pochodną w x=0
     dx0 = 0
 
     # Z pochodną w P1
-    dx1 = 1
+    dx1 = -1.9
 
     f0 = fsolve(P1[0], P1[1], dx0, dx1, eps=10**(-3))
     h0 = h(f0, P1[0], P1[1], dx0, dx1)
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     print("Współczynniki", f0, h0, a0, v0)
 
-    r = 10**(-3)
+    r = 10**(-2)
 
     Xvals, Yvals = [0], [0]
     while Xvals[-1] < P1[0]:
@@ -82,6 +82,6 @@ if __name__ == "__main__":
     dP1 = (Yvals[-1]-Yvals[-2])/(Xvals[-1]-Xvals[-2])
     print("Pochodne", dP0, dP1)
 
-    #plt.plot(Xvals, Yvals, 'o', [0, P1[0]], [0, P1[1]], 'o')
-    #plt.grid(True)
-    #plt.show()
+    plt.plot(Xvals, Yvals, 'o', [0, P1[0]], [0, P1[1]], 'o')
+    plt.grid(True)
+    plt.show()
