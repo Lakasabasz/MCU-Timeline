@@ -1,5 +1,6 @@
 import {Shader} from './shader.js';
 
+
 export class WebGLScene{
   constructor(canvas, setupdata){
     this.gl = canvas.getContext('webgl2');
@@ -8,15 +9,20 @@ export class WebGLScene{
     }
 
     this.shaders = {};
-    for(let shaderData of setupdata.shaders){
+    for(const shaderData of setupdata.shaders){
       try{
-        let shader = Shader(this.gl, shaderData.vCode, shaderData.fCode, shaderData.info, shaderData.name);
+        let shader = new Shader(this.gl, shaderData.vCode, shaderData.fCode, shaderData.info, shaderData.name);
         this.shaders[shaderData.name] = shader;
-      } catch{
+      } catch(e){
+        console.error(e);
         continue;
       }
     }
 
     // timelines objects compilation
+    for(const timelineScatch of setupdata.timelines){
+      console.log(timelineScatch);
+      console.log(description);
+    }
   }
 }

@@ -26,6 +26,8 @@ export class Shader{
     for(const key of Object.keys(shaderInfo.uniformLocation)){
       this.uniformLocation[key] = gl.getUniformLocation(program, shaderInfo.uniformLocation[key]);
     }
+
+    this.name = name;
   }
 
   buildShader(shaderType, shaderSource){
@@ -42,5 +44,9 @@ export class Shader{
     }
 
     return shader;
+  }
+
+  getName(){
+    return this.name;
   }
 }

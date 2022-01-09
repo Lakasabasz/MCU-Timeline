@@ -2,6 +2,7 @@ import {createBuffer, drawScene} from './wgl-tools.js';
 import {MCUTimeline} from './mcutimeline.js';
 import * as simpleShader from './shaders/simpleshader.js';
 import {TimelineType} from './timelinetypes.js';
+import {Linear} from './linear.js';
 
 let mcutimeline = null;
 
@@ -36,6 +37,7 @@ let setupdata = {
 };
 
 function load(){
+  let abstracttest = new Linear();
   mcutimeline = new MCUTimeline("canvas", setupdata);
 }
 
