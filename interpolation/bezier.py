@@ -27,13 +27,19 @@ if __name__ == "__main__":
     # Obliczanie puntów kontrolnych
     b0 = p0[1] - p0[2]*p0[0]
     b1 = p1[1] - p1[2]*p1[0]
-    x = (b1-b0)/(p0[0]-p1[0])
+    x = (b1-b0)/(p0[2]-p1[2])
     y = p0[2]*x+b0
     pk = [tuple(p0[:2]), (x, y), tuple(p1[:2])]
 
     spl = bezier_spline(pk, 10)
 
     xvals, yvals = tuple(zip(*spl))
-    plt.plot(xvals, yvals, "-", xvals, yvals, "o")
+    plt.plot(
+        xvals, yvals, "-",
+        [p0[0], p0[0]+2], [p0[1], p0[1]+2*p0[2]], "-",
+        [p1[0], p1[0]-2], [p1[1], p1[1]-2*p1[2]], "-",
+        xvals, yvals, "o",
+        [pk[0][0], pk[1][0], pk[2][0]], [pk[0][1], pk[1][1], pk[2][1]], "o"
+    )
     plt.grid(True)
     plt.show()
