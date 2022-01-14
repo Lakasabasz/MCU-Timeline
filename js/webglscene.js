@@ -1,4 +1,5 @@
 import {Shader} from './shader.js';
+import {Timeline} from './timeline.js';
 
 
 export class WebGLScene{
@@ -20,9 +21,14 @@ export class WebGLScene{
     }
 
     // timelines objects compilation
+    this.timelines = [];
     for(const timelineScatch of setupdata.timelines){
       console.log(timelineScatch);
-      console.log(description);
+      this.timelines.push(new Timeline({name: timelineScatch.description.name,
+                                shader: this.shaders[timelineScatch.description.shader],
+                                type: timelineScatch.description.type,
+                                subnodes: timelineScatch.description.subnodes}, timelineScatch.completefunction))
     }
+    console.log(this.timelines);
   }
 }
