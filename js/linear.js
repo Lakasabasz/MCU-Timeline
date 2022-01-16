@@ -22,9 +22,13 @@ export class Linear extends MonolitFunction{
 
     this.a = (node1.y - node2.y)/(node1.x - node2.x);
     this.b = node1.y - this.a*node1.x;
+    this.x = [node1.x, node2.x];
+    if(node1.x > node2.x) this.x = [node2.x, node1.x];
   }
 
   getSpline(){
-    //const alfa = Math.atan(this.a);
+    const p0 = [this.x[0], this.a*this.x[0]+this.b];
+    const p1 = [this.x[1], this.a*this.x[1]+this.b];
+    return [p0, p1];
   }
 }

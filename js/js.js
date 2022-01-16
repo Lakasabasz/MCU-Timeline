@@ -50,10 +50,6 @@ function main(){
     console.log('WebGL initialized ' + gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
   }
 
-  wglcore.loadShader(simpleShader.vertShader, simpleShader.fragShader, simpleShader.shaderInfo, "simple");
-
-  const shaderProgram = initShaderProgram(gl);
-
   const timeline = arc();
   console.log(timeline);
 
@@ -61,7 +57,6 @@ function main(){
     createBuffer(gl, timeline, [0.0, 2.0/3, 1.0, 1.0])
   ];
 
-  drawScene(gl, shaderProgram, buffers);
 }
 
 function f(x, x1, y1, y2, y3){

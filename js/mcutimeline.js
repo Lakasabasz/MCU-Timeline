@@ -7,5 +7,6 @@ export class MCUTimeline{
     }
     const canvas = document.getElementById(canvasid);
     this.webglscene = new WebGLScene(canvas, setupdata);
+    this.webglscene.draw();
   }
 }

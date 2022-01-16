@@ -40,4 +40,8 @@ export class Timeline{
 
     return {type: type, shader: shader, name: name, subnodes: subnodes, width: width, selected: selected};
   }
+
+  getTriangles(){
+    return this.func.getTriangles();
+  }
 }

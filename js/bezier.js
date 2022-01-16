@@ -23,6 +23,25 @@ export class Bezier extends MonolitFunction{
       throw new Error("Choosen nodes their derivatives leaves no space for arc");
     }
 
-    this.pk = [(node1.x, node1.y), (x, y), (node2.x, node2.y)];
+    this.pk = [[node1.x, node1.y], [x, y], [node2.x, node2.y]];
+  }
+
+  B(newton, i, t){
+    return newton*Math.pow(1-t, 2-i)*Math.pow(t, i);
+  }
+
+  getSpline(){
+    let p = [];
+    const steps = 100;
+    const move = 1/steps;
+
+    for(let i = 0; i<steps; i++){
+      let point = [0.0, 0.0];
+      const current = move*i;
+      point[0] = this.pk[0][0]*this.B(1, 0, current) + this.pk[1][0]*this.B(2, 1, current) + this.pk[2][0]*this.B(1, 2, current);
+      point[1] = this.pk[0][1]*this.B(1, 0, current) + this.pk[1][1]*this.B(2, 1, current) + this.pk[2][1]*this.B(1, 2, current);
+      p.push(point);
+    }
+    return p;
   }
 }

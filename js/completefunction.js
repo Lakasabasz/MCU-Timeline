@@ -25,6 +25,21 @@ export class CompleteFunction{
   }
 
   getFullSpline(){
-    //
+    let spline = this.monolits[0].getSpline();
+    for(const mono of this.monolits.slice(1)){
+      spline = spline.concat(mono.getSpline().slice(1));
+    }
+    return spline;
+  }
+
+  getTriangles(){
+    let tpoints = [];
+    const fspl = this.getFullSpline();
+    let a = (fspl[0][1] - fspl[1][1])/(fspl[0][0] - fspl[1][0]);
+    a = -1/a;
+    let b = fspl[0][1] - a*fspl[0][0];
+    
+    console.log(fspl);
+    return tpoints;
   }
 }
