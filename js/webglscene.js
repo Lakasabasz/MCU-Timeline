@@ -30,7 +30,9 @@ export class WebGLScene{
       const timeline = new Timeline({name: timelineScatch.description.name,
                                 shader: this.shaders[timelineScatch.description.shader],
                                 type: timelineScatch.description.type,
-                                subnodes: timelineScatch.description.subnodes}, timelineScatch.completefunction);
+                                subnodes: timelineScatch.description.subnodes,
+                                width: timelineScatch.description.width,
+                                selected: timelineScatch.description.selected}, timelineScatch.completefunction);
       this.timelines.push({timeline: timeline, buffer: null, uptodate: false});
     }
 
@@ -79,7 +81,6 @@ export class WebGLScene{
   }
 
   drawTimeline(timeline, buffer, buffinfo){
-    console.log(timeline.description.shader);
     this.gl.useProgram(timeline.description.shader.program);
     this.gl.uniformMatrix4fv(timeline.description.shader.uniformLocation.pMatrix, false, this.projectionMatrix);
 
