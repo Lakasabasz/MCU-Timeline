@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -1 2 1">
+  <defs>
+    <filter id="filter1231">
+      <feGaussianBlur stdDeviation="0.0192"></feGaussianBlur>
+    </filter>
+    <filter style="color-interpolation-filters:sRGB" id="filter1271" x="-0.036" width="1.072" y="-0.072" height="1.144">
+      <feGaussianBlur stdDeviation="0.03" id="feGaussianBlur1273"></feGaussianBlur>
+    </filter>
+    <filter style="color-interpolation-filters:sRGB" id="filter1287" x="-0.009" width="1.018" y="-0.018" height="1.036">
+      <feGaussianBlur stdDeviation="0.0075" id="feGaussianBlur1289"></feGaussianBlur>
+    </filter>
+  </defs>
+  <path d="M 0 0 C 0 0 1 0 2 -1" stroke="#00b5ff" stroke-width="0.075" fill="none" style="filter:url(#filter1271);"></path>
+  <path d="M 0 0 C 0 0 1 0 2 -1" stroke="#f500ff" stroke-width="0.05" fill="none" style="filter:url(#filter1231)"></path>
+  <path d="M 0 0 C 0 0 1 0 2 -1" stroke="#9eeeff" stroke-width="0.025" fill="none" style="filter:url(#filter1287);"></path>
+</svg>

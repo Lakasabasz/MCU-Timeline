@@ -1,0 +1,43 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+  color: hsl(0, 0%, 100%);
+}
+
+body {
+  margin: 0;
+  background-color: hsl(0, 0%, 7%);
+  overflow: hidden;
+}
+
+div.timeline {
+  width: 100vw;
+  height: 90vh;
+}
+
+div>div {
+  background-color: white;
+  width: 6px;
+  height: 6px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-shadow: 0px 0px 7px 1px #00B5FF;
+  transform: rotate(45deg);
+}
+
+#connectContainer svg {
+  position: absolute;
+}
+
+svg path:nth-child(1) {
+  filter: blur(0.03px);
+}
+
+svg path:nth-child(2) {
+  filter: blur(0.0192px);
+}
+
+svg path:nth-child(3) {
+  filter: blur(0.0075px);
+}
