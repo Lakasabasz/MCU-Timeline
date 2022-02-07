@@ -1,9 +1,8 @@
-import {createBuffer, drawScene} from './wgl-tools.js';
 import {MCUTimeline} from './mcutimeline.js';
 import * as simpleShader from './shaders/simpleshader.js';
 import {TimelineType} from './timelinetypes.js';
 
-let mcutimeline = null;
+let mcutimeline: MCUTimeline;
 
 let setupdata = {
   shaders: [

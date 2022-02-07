@@ -1,5 +1,16 @@
+type ShaderInfo = {
+  attribLocation: Record<any, string>,
+  uniformLocation: Record<any, string>
+}
+
 export class Shader{
-  constructor(gl, vShader, fShader, shaderInfo, name){
+  gl: WebGL2RenderingContext;
+  name: string;
+  program: WebGLProgram;
+  attribLocation: Record<any, number>;
+  uniformLocation: Record<any, WebGLUniformLocation>;
+
+  constructor(gl: WebGL2RenderingContext, vShader: string, fShader: string, shaderInfo: ShaderInfo, name: string){
     this.gl = gl;
     const vSh = this.buildShader(gl.VERTEX_SHADER, vShader);
     const fSh = this.buildShader(gl.FRAGMENT_SHADER, fShader);
@@ -8,6 +19,9 @@ export class Shader{
     }
 
     const program = gl.createProgram();
+    if(program === null){
+      throw new Error("WebGL2 was not able to create shader program");
+    }
     gl.attachShader(program, vSh);
     gl.attachShader(program, fSh);
     gl.linkProgram(program);
@@ -24,14 +38,21 @@ export class Shader{
       this.attribLocation[key] = gl.getAttribLocation(program, shaderInfo.attribLocation[key]);
     }
     for(const key of Object.keys(shaderInfo.uniformLocation)){
-      this.uniformLocation[key] = gl.getUniformLocation(program, shaderInfo.uniformLocation[key]);
+      const location = gl.getUniformLocation(program, shaderInfo.uniformLocation[key]);
+      if(location === null){
+        throw new Error("Shader " + name + " not found uniform " + shaderInfo.uniformLocation[key]);
+      }
+      this.uniformLocation[key] = location;
     }
 
     this.name = name;
   }
 
-  buildShader(shaderType, shaderSource){
+  buildShader(shaderType: number, shaderSource: string){
     const shader = this.gl.createShader(shaderType);
+    if(shader === null){
+      throw new Error("WebGL was not able to create Shader");
+    }
 
     this.gl.shaderSource(shader, shaderSource);
 

@@ -1,17 +1,10 @@
 import {MonolitFunction} from './monolitfunction.js';
 
 export class Linear extends MonolitFunction{
-  /**
-  * @param {Object} node1
-  * @param {float} node1.x
-  * @param {float} node1.y
-  * @param {float} node1.d
-  * @param {Object} node2
-  * @param {float} node2.x
-  * @param {float} node2.y
-  * @param {float} node2.d
-  **/
-  constructor(node1, node2){
+  a: number
+  b: number
+  x: [number, number]
+  constructor(node1: {x: number, y:number, d:number}, node2: {x: number, y:number, d:number}){
     if(node1.x == node2.x){
       throw new Error("Nodes x value is invalid");
     }
