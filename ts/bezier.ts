@@ -1,17 +1,9 @@
 import {MonolitFunction} from './monolitfunction.js';
 
 export class Bezier extends MonolitFunction{
-  /**
-  * @param {Object} node1
-  * @param {float} node1.x
-  * @param {float} node1.y
-  * @param {float} node1.d
-  * @param {Object} node2
-  * @param {float} node2.x
-  * @param {float} node2.y
-  * @param {float} node2.d
-  **/
-  constructor(node1, node2){
+  pk: number[][]
+
+  constructor(node1: {x: number, y: number, d: number}, node2: {x: number, y: number, d: number}){
     super();
     // Obliczenie punktu kontrolnego
     const b1 = node1.y-node1.d*node1.x;
@@ -26,7 +18,7 @@ export class Bezier extends MonolitFunction{
     this.pk = [[node1.x, node1.y], [x, y], [node2.x, node2.y]];
   }
 
-  B(newton, i, t){
+  B(newton: number, i: number, t: number){
     return newton*Math.pow(1-t, 2-i)*Math.pow(t, i);
   }
 
