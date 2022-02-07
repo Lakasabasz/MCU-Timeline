@@ -133,3 +133,6 @@ package.json
 .tern-project
 
 js-build
+
+js/*.js
+js/shaders/
