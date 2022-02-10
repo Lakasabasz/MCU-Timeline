@@ -4,7 +4,9 @@
   "description": "TBA",
   "main": "index.html",
   "scripts": {
-    "test": "jest"
+    "test": "run-script-os",
+    "test:win32": "echo Windows & jest",
+    "test:linux": "echo Linux; jest"
   },
   "repository": {
     "type": "git",
@@ -22,6 +24,7 @@
     "eslint-plugin-html": "^6.1.2",
     "jest": "^27.5.0",
     "jest-cli": "^27.5.0",
+    "run-script-os": "^1.1.6",
     "ts-jest": "^27.1.3",
     "typescript": "^4.5.5"
   },
