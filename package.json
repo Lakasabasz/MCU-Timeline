@@ -5,8 +5,8 @@
   "main": "index.html",
   "scripts": {
     "test": "run-script-os",
-    "test:win32": "echo Windows & jest",
-    "test:linux": "echo Linux; jest"
+    "test:win32": "echo Windows & jest --coverage",
+    "test:linux": "echo Linux; jest --coverage"
   },
   "repository": {
     "type": "git",

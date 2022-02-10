@@ -1,13 +1,13 @@
 import {Linear} from './linear.js';
 import {Bezier} from './bezier.js';
 
-type Node = {
+export type Node = {
   x: number,
   y: number,
   d: number
 };
 
-type Connector = {
+export type Connector = {
   type: string
 }
 
