@@ -9,7 +9,14 @@ export class MCUTimeline{
     if(canvas === null){
       throw new Error("<canvas> with id " + canvasid + " not exists");
     }
+
+    canvas.onmousemove = this.onMouseMoveHandler;
+
     this.webglscene = new WebGLScene(canvas, setupdata);
     this.webglscene.draw();
+  }
+
+  onMouseMoveHandler(event: MouseEvent){
+    console.log(event.clientX, event.clientY);
   }
 }
