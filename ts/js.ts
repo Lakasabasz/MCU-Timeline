@@ -30,7 +30,7 @@ function loadfromdefaults(){
 }
 
 function load(){
-  loadfromendpoint() || loadfromdefaults();
+  loadfromendpoint();
 }
 
 window.onload=load;

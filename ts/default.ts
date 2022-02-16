@@ -11,11 +11,11 @@ const setupdata: SetupData = {
       description: {
         type: TimelineType.COMPLEX,
         shader: "simple",
-        selected: false,
         width: 4/200,
+        selected: false,
         subnodes: [
-          {x: -1.0, msg: 'Punkt A'},
-          {x: 0.0, msg: 'Punkt B'}
+          {t: 0.0, msg: 'Punkt A'},
+          {t: 1.6, msg: 'Punkt B'}
         ],
         name: "test"
       },
@@ -27,6 +27,29 @@ const setupdata: SetupData = {
         {x: 0.5, y: 1.0, d: 1.0},
         {type: "linear"},
         {x: 2.5, y: 3.0, d: 1.0}
+      ]
+    },
+    {
+      description: {
+        type: TimelineType.COMPLEX,
+        shader: "simple",
+        selected: false,
+        width: 8/200,
+        subnodes:[
+          {t: 0.0, msg: "C"},
+          {t: 1.3, msg: "A"},
+          {t: 2.0, msg: "B"},
+        ],
+        name: "Secondary"
+      },
+      completefunction:[
+        {x: -3.0, y: -2.0, d: 1.0},
+        {type: "linear"},
+        {x: -1.5, y: -0.5, d: 1.0},
+        {type: "bezier"},
+        {x: 0.0, y: 0.0, d: 0.0},
+        {type: "linear"},
+        {x: 2.0, y: 0.0, d: 0.0}
       ]
     }
   ]

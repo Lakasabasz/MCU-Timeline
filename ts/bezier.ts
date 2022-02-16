@@ -30,10 +30,16 @@ export class Bezier extends MonolitFunction{
     for(let i = 0; i<steps; i++){
       let point = [0.0, 0.0];
       const current = move*i;
-      point[0] = this.pk[0][0]*this.B(1, 0, current) + this.pk[1][0]*this.B(2, 1, current) + this.pk[2][0]*this.B(1, 2, current);
-      point[1] = this.pk[0][1]*this.B(1, 0, current) + this.pk[1][1]*this.B(2, 1, current) + this.pk[2][1]*this.B(1, 2, current);
-      p.push(point);
+      p.push(this.getCoords(current));
     }
     return p;
   }
+
+  getCoords(t: number): [number, number] {
+    let point = [0, 0];
+    point[0] = this.pk[0][0]*this.B(1, 0, t) + this.pk[1][0]*this.B(2, 1, t) + this.pk[2][0]*this.B(1, 2, t);
+    point[1] = this.pk[0][1]*this.B(1, 0, t) + this.pk[1][1]*this.B(2, 1, t) + this.pk[2][1]*this.B(1, 2, t);
+    return <[number, number]>point;
+  }
+
 }

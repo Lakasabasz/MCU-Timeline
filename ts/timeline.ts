@@ -2,11 +2,13 @@ import {CompleteFunction, CompleteFunctionConfig} from './completefunction.js';
 import {TimelineType} from './timelinetypes.js';
 import {Shader} from './shader.js';
 
+export type Subnodes = {t: number, msg: string}[];
+
 type TimelineDescription = {
   type: TimelineType,
   shader: Shader,
   name: string,
-  subnodes: {x: number, msg: string}[],
+  subnodes: Subnodes,
   width: number,
   selected: boolean
 };
@@ -46,13 +48,16 @@ export class Timeline{
       wp1=[r*wp1[0], r*wp1[1]];
       wp2=[r*wp2[0], r*wp2[1]];
 
-      wp1=[wp1[0] + p0[0], wp1[1] + p0[1]];
-      wp2=[wp2[0] + p0[0], wp2[1] + p0[1]];
+      wp1=[wp1[0] + p1[0], wp1[1] + p1[1]];
+      wp2=[wp2[0] + p1[0], wp2[1] + p1[1]];
 
       tpoints = tpoints.concat(wp1);
       tpoints = tpoints.concat(wp2);
     }
 
     return tpoints;
+  }
+  getCoordsOfSubnode(t: number) {
+    return this.func.getCoordsByDistance(t);
   }
 }

@@ -1,5 +1,5 @@
 import {Shader} from './shader.js';
-import {Timeline} from './timeline.js';
+import {Timeline, Subnodes} from './timeline.js';
 import {TimelineType} from './timelinetypes.js'
 import {CompleteFunctionConfig} from './completefunction.js';
 //@ts-ignore
@@ -24,7 +24,7 @@ type TimelineDescriptionConfig = {
   shader: string,
   selected: boolean,
   width: number,
-  subnodes:{x: number, msg: string}[],
+  subnodes: Subnodes,
   name: string
 };
 
@@ -81,11 +81,15 @@ export class WebGLScene{
     this.projectionMatrix = this.createIsometricProjection(this.canvas.width, this.canvas.height);
   }
 
+  calcRelativeCoord(value: number){
+    return value/200.0;
+  }
+
   createIsometricProjection(canvasWidth: number, canvasHeight: number, centerX = .0, centerY = .0, near = 0.1, far = 100): mat4{
     const projectionMatrix = glMatrix.mat4.create();
     glMatrix.mat4.ortho(projectionMatrix,
-                        (-canvasWidth/200.0)+centerX, (canvasWidth/200.0)+centerX,
-                        (-canvasHeight/200.0)+centerY, (canvasHeight/200.0)+centerY,
+                        this.calcRelativeCoord(-canvasWidth)+centerX, this.calcRelativeCoord(canvasWidth)+centerX,
+                        this.calcRelativeCoord(-canvasHeight)+centerY, this.calcRelativeCoord(canvasHeight)+centerY,
                         near, far);
     return projectionMatrix;
   }
@@ -143,5 +147,48 @@ export class WebGLScene{
     this.gl.enableVertexAttribArray(timeline.description.shader.attribLocation.vertexPosition);
 
     this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, buffinfo.vertexCount);
+  }
+
+  calcDistance(a: [number, number], b: [number, number]): number{
+    return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
+  }
+
+  selectClosestSubnode(pixX:number, pixY:number){
+    const n = this.calcRelativeCoord(this.canvas.width);
+    const m = this.calcRelativeCoord(-this.canvas.width)
+    let a = (n-m)/this.canvas.width;
+    const x = a*pixX+m /* Dodać przesunięcie canvasa gdy będzie go obsługiwać kod */;
+    const r = this.calcRelativeCoord(this.canvas.height);
+    const p = this.calcRelativeCoord(-this.canvas.height);
+    a = (r-p)/this.canvas.height;
+    const y = -(a*pixY+p);
+
+    // Select closest subpoint
+    let closestSubpoint: null | {t: number, msg: string, timeline: Timeline} = null;
+    for(let tl of this.timelines){
+      let last: null | {t: number, msg: string} = null;
+
+      for(let subn of tl.timeline.description.subnodes){
+        if(last == null){
+          last = subn;
+          continue;
+        }
+        if(this.calcDistance(tl.timeline.getCoordsOfSubnode(subn.t), [x, y]) > this.calcDistance(tl.timeline.getCoordsOfSubnode(last.t), [x, y])) break;
+        last = subn;
+      }
+
+      if(last == null) continue;
+      else if(closestSubpoint == null){
+        closestSubpoint = {t: last.t, msg: last.msg, timeline: tl.timeline};
+      } else if(this.calcDistance(closestSubpoint.timeline.getCoordsOfSubnode(closestSubpoint.t), [x, y]) > this.calcDistance(tl.timeline.getCoordsOfSubnode(last.t), [x, y])){
+        closestSubpoint = {t: last.t, msg: last.msg, timeline: tl.timeline};
+      }
+    }
+
+    if(closestSubpoint == null) console.warn("None subpoints found");
+    else console.log(closestSubpoint.msg, closestSubpoint.timeline.description.name);
+    // Add/Move if needed point
+    // Clear board if needed
+    // Redraw board if needed
   }
 }

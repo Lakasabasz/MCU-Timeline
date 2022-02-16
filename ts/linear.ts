@@ -24,4 +24,9 @@ export class Linear extends MonolitFunction{
     const p1 = [this.x[1], this.a*this.x[1]+this.b];
     return [p0, p1];
   }
+
+  getCoords(t: number): [number, number] {
+    const x = (this.x[1]-this.x[0])*t + this.x[0];
+    return [x, this.a*x+this.b];
+  }
 }

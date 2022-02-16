@@ -10,13 +10,14 @@ export class MCUTimeline{
       throw new Error("<canvas> with id " + canvasid + " not exists");
     }
 
-    canvas.onmousemove = this.onMouseMoveHandler;
+    canvas.onmousemove = (event) => {this.onMouseMoveHandler(event);};
 
     this.webglscene = new WebGLScene(canvas, setupdata);
     this.webglscene.draw();
   }
 
   onMouseMoveHandler(event: MouseEvent){
-    console.log(event.clientX, event.clientY);
+    const canvas: HTMLCanvasElement = <HTMLCanvasElement>event.target;
+    this.webglscene.selectClosestSubnode(event.clientX-canvas.offsetLeft, event.clientY-canvas.offsetTop);
   }
 }
