@@ -4,6 +4,8 @@ import {TimelineType} from './timelinetypes.js'
 import {CompleteFunctionConfig} from './completefunction.js';
 //@ts-ignore
 import * as glMatrix from './gl-matrix/index.js';
+import { maxdistancefrompoint } from './settings.env.js';
+import { Point } from './point.js';
 
 type ShaderConfig = {
   vCode: string,
@@ -44,6 +46,7 @@ export class WebGLScene{
   timelines: {timeline: Timeline, buffer: WebGLBuffer | null, uptodate: boolean}[]
   buffers: []
   projectionMatrix: mat4;
+  subpoint: Point;
 
   constructor(canvas: HTMLCanvasElement, setupdata: SetupData){
     let gl = canvas.getContext('webgl2');
@@ -79,6 +82,8 @@ export class WebGLScene{
     }
 
     this.projectionMatrix = this.createIsometricProjection(this.canvas.width, this.canvas.height);
+
+    this.subpoint = new Point(this.shaders["simple"]);
   }
 
   calcRelativeCoord(value: number){
@@ -104,6 +109,7 @@ export class WebGLScene{
       }
       this.drawTimeline(tldata.timeline, tldata.buffer, tldata.timeline.buffersetup);
     }
+    this.subpoint.drawPoint(this.projectionMatrix);
   }
 
   clear(){
@@ -185,8 +191,26 @@ export class WebGLScene{
       }
     }
 
-    if(closestSubpoint == null) console.warn("None subpoints found");
-    else console.log(closestSubpoint.msg, closestSubpoint.timeline.description.name);
+    if(closestSubpoint == null) {
+      console.warn("None subpoints found");
+      return;
+    }
+
+    if(this.calcDistance(closestSubpoint.timeline.getCoordsOfSubnode(closestSubpoint.t), [x, y]) > maxdistancefrompoint) {
+      if(this.subpoint.getVisible()){
+        this.subpoint.setVisible(false);
+        this.clear();
+        this.draw();
+      }
+    } else{
+      if(!this.subpoint.getVisible() || !closestSubpoint.timeline.getCoordsOfSubnode(closestSubpoint.t).every((v, i) => this.subpoint.getPosition()[i] == v)){
+        this.subpoint.setPosition(closestSubpoint.timeline.getCoordsOfSubnode(closestSubpoint.t));
+        this.subpoint.setSize(10/200 + closestSubpoint.timeline.description.width);
+        this.subpoint.setVisible(true);
+        this.clear();
+        this.draw();
+      }
+    }
     // Add/Move if needed point
     // Clear board if needed
     // Redraw board if needed
