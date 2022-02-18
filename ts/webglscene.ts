@@ -32,6 +32,10 @@ type TimelineDescriptionConfig = {
 
 export type SetupData = {
   shaders: ShaderConfig,
+  subpoint:{
+    additionalSize: number,
+    shader: string
+  }
   timelines:{
     description: TimelineDescriptionConfig,
     completefunction: CompleteFunctionConfig
@@ -47,6 +51,7 @@ export class WebGLScene{
   buffers: []
   projectionMatrix: mat4;
   subpoint: Point;
+  subpointsettings: {additionalSize: number};
 
   constructor(canvas: HTMLCanvasElement, setupdata: SetupData){
     let gl = canvas.getContext('webgl2');
@@ -83,7 +88,8 @@ export class WebGLScene{
 
     this.projectionMatrix = this.createIsometricProjection(this.canvas.width, this.canvas.height);
 
-    this.subpoint = new Point(this.shaders["simple"]);
+    this.subpoint = new Point(this.shaders[setupdata.subpoint.shader]);
+    this.subpointsettings = {additionalSize: setupdata.subpoint.additionalSize};
   }
 
   calcRelativeCoord(value: number){
@@ -205,14 +211,11 @@ export class WebGLScene{
     } else{
       if(!this.subpoint.getVisible() || !closestSubpoint.timeline.getCoordsOfSubnode(closestSubpoint.t).every((v, i) => this.subpoint.getPosition()[i] == v)){
         this.subpoint.setPosition(closestSubpoint.timeline.getCoordsOfSubnode(closestSubpoint.t));
-        this.subpoint.setSize(10/200 + closestSubpoint.timeline.description.width);
+        this.subpoint.setSize(this.subpointsettings.additionalSize + closestSubpoint.timeline.description.width);
         this.subpoint.setVisible(true);
         this.clear();
         this.draw();
       }
     }
-    // Add/Move if needed point
-    // Clear board if needed
-    // Redraw board if needed
   }
 }

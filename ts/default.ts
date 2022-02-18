@@ -6,6 +6,10 @@ const setupdata: SetupData = {
   shaders: [
     {vCode: vertShader, fCode: fragShader, info: shaderInfo, name: "simple"}
   ],
+  subpoint:{
+    additionalSize: 10/200,
+    shader: "simple"
+  },
   timelines:[
     {
       description: {
