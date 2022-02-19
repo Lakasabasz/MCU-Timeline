@@ -218,4 +218,8 @@ export class WebGLScene{
       }
     }
   }
+
+  selectClosestTimeline(pixX: number, pixY: number) {
+    console.log('Method not implemented: ', pixX, pixY);
+  }
 }
