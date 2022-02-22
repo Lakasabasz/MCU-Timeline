@@ -50,4 +50,12 @@ export class CompleteFunction{
   getCoordsByDistance(t: number) {
     return this.monolits[Math.trunc(t)].getCoords(t-Math.trunc(t));
   }
+
+  minimumDistanceFrom(point: [number, number]): number {
+    let dist = Number.POSITIVE_INFINITY;
+    for(const monolit of this.monolits){
+      if(dist > monolit.distanceFromPoint(point)) dist = monolit.distanceFromPoint(point);
+    }
+    return dist;
+  }
 }

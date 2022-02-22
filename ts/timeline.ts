@@ -60,4 +60,8 @@ export class Timeline{
   getCoordsOfSubnode(t: number) {
     return this.func.getCoordsByDistance(t);
   }
+
+  distanceFromPoint(point: [number, number]): number {
+    return this.func.minimumDistanceFrom(point);
+  }
 }

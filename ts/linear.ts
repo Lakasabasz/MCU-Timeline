@@ -29,4 +29,20 @@ export class Linear extends MonolitFunction{
     const x = (this.x[1]-this.x[0])*t + this.x[0];
     return [x, this.a*x+this.b];
   }
+
+  distanceFromPoint(point: [number, number]): number {
+    // Weryfikacja gdzie jest przecięcie
+    const c = point[0] + this.a*point[1];
+    const x = (c-this.a*this.b)/(this.a*this.a + 1);
+    const y = this.a*x+this.b;
+
+    // Obliczenie odległości w zależności od przecięcia
+    if(x < this.x[0]){
+      return Math.abs(point[0] - this.x[0]) + Math.abs(point[1] - (this.a * this.x[0] + this.b));
+    } else if(x > this.x[1]){
+      return Math.abs(point[0] - this.x[1]) + Math.abs(point[1] - (this.a * this.x[1] + this.b));
+    } else{
+      return Math.abs(point[0] - x) + Math.abs(point[1] - y);
+    }
+  }
 }

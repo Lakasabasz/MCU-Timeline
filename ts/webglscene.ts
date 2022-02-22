@@ -165,7 +165,7 @@ export class WebGLScene{
     return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
   }
 
-  selectClosestSubnode(pixX:number, pixY:number){
+  pixelsToCoords(pixX: number, pixY: number): [number, number]{
     const n = this.calcRelativeCoord(this.canvas.width);
     const m = this.calcRelativeCoord(-this.canvas.width)
     let a = (n-m)/this.canvas.width;
@@ -174,6 +174,11 @@ export class WebGLScene{
     const p = this.calcRelativeCoord(-this.canvas.height);
     a = (r-p)/this.canvas.height;
     const y = -(a*pixY+p);
+    return [x, y];
+  }
+
+  selectClosestSubnode(pixX:number, pixY:number){
+    const [x, y] = this.pixelsToCoords(pixX, pixY);
 
     // Select closest subpoint
     let closestSubpoint: null | {t: number, msg: string, timeline: Timeline} = null;
@@ -220,6 +225,19 @@ export class WebGLScene{
   }
 
   selectClosestTimeline(pixX: number, pixY: number) {
-    console.log('Method not implemented: ', pixX, pixY);
+    const [x, y] = this.pixelsToCoords(pixX, pixY);
+    let closestTimeline: null | Timeline = null;
+    let distance: number = Number.POSITIVE_INFINITY;
+    for(let tl of this.timelines){
+      if(distance > tl.timeline.distanceFromPoint([x, y])){
+        distance = tl.timeline.distanceFromPoint([x, y]);
+        closestTimeline = tl.timeline;
+      }
+    }
+    if(closestTimeline == null){
+      console.warn("No timelines found");
+      return;
+    }
+    console.log(closestTimeline.description.name);
   }
 }
