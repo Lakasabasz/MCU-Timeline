@@ -64,4 +64,12 @@ export class Timeline{
   distanceFromPoint(point: [number, number]): number {
     return this.func.minimumDistanceFrom(point);
   }
+
+  select() {
+    this.description.selected = true;
+  }
+
+  clearSelection(){
+    this.description.selected = false;
+  }
 }

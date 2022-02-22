@@ -4,7 +4,7 @@ import {TimelineType} from './timelinetypes.js'
 import {CompleteFunctionConfig} from './completefunction.js';
 //@ts-ignore
 import * as glMatrix from './gl-matrix/index.js';
-import { maxdistancefrompoint } from './settings.env.js';
+import {maxDistanceFromPoint, maxDistanceFromTimeline} from './settings.env.js';
 import { Point } from './point.js';
 
 type ShaderConfig = {
@@ -207,7 +207,7 @@ export class WebGLScene{
       return;
     }
 
-    if(this.calcDistance(closestSubpoint.timeline.getCoordsOfSubnode(closestSubpoint.t), [x, y]) > maxdistancefrompoint) {
+    if(this.calcDistance(closestSubpoint.timeline.getCoordsOfSubnode(closestSubpoint.t), [x, y]) > maxDistanceFromPoint) {
       if(this.subpoint.getVisible()){
         this.subpoint.setVisible(false);
         this.clear();
@@ -229,15 +229,15 @@ export class WebGLScene{
     let closestTimeline: null | Timeline = null;
     let distance: number = Number.POSITIVE_INFINITY;
     for(let tl of this.timelines){
-      if(distance > tl.timeline.distanceFromPoint([x, y])){
+      tl.timeline.clearSelection();
+      const dist = tl.timeline.distanceFromPoint([x, y]);
+      if(distance > dist && dist <= maxDistanceFromTimeline){
         distance = tl.timeline.distanceFromPoint([x, y]);
         closestTimeline = tl.timeline;
       }
     }
-    if(closestTimeline == null){
-      console.warn("No timelines found");
-      return;
-    }
-    console.log(closestTimeline.description.name);
+    if(closestTimeline == null) return;
+    closestTimeline.select();
+    console.log(this.timelines);
   }
 }
