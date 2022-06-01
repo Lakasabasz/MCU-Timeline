@@ -7,7 +7,7 @@ import {endpoint} from './settings.env.js';
 let mcutimeline: MCUTimeline;
 
 function loadfromendpoint(){
-  fetch(endpoint, {mode: 'no-cors'}).then(resp => {
+  fetch(endpoint, {mode: 'cors', headers: {"Access-Control-Allow-Origin": "https://localhost:7003"}}).then(resp => {
     if(!resp.ok) {
       console.log(resp);
       throw new Error("Load from endpoint failed");
