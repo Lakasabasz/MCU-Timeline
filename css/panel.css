@@ -1,0 +1,75 @@
+:root{
+    --background: #0070A0;
+    --second-background: #008DCA;
+    --input-background: #ECECEC;
+    --button-color: #0026CA;
+    --button-inside: #ffffff;
+}
+
+body{
+    background-color: var(--background);
+    display: flex;
+    vertical-align: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    margin: 0;
+}
+
+form{
+    background-color: var(--second-background);
+    width: 480px;
+    height: 522px;
+    border-radius: 10px;
+    border: var(--input-background) solid 2px;
+    display: flex;
+    justify-content: center;
+}
+
+form>div{
+    position: relative;
+    top: 49px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 44px;
+    height: 232px;
+    width: 328px;
+}
+
+form>div>input{
+    border-radius: 4px;
+    border-color: var(--input-background);
+    background: var(--input-background);
+    height: 48px;
+    width: 328px;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+form>div>input::placeholder{
+    color: var(--second-background);
+}
+
+form>div>input[type="submit"] {
+    height: 48px;
+    width: 138px;
+    flex: none;
+    background: #0026CA;
+    border-color: #0026CA;
+    filter: drop-shadow(0px 8px 10px rgba(48, 79, 254, 0.14))
+            drop-shadow(0px 3px 14px rgba(48, 79, 254, 0.12))
+            drop-shadow(0px 4px 5px rgba(48, 79, 254, 0.2));
+    color: #ffffff;
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-style: normal;
+}

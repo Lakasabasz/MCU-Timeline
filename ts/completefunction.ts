@@ -1,5 +1,6 @@
 import {Linear} from './linear.js';
 import {Bezier} from './bezier.js';
+import { MonolitFunction } from './monolitfunction.js';
 
 type Node = {
   x: number,
@@ -21,7 +22,7 @@ export class CompleteFunction{
   * @param {float} nclist[].d needed when describing node. Derivative in point (x, y)
   * @param {string} nclist[].type needed when describing connector. Type could be linear, sinus, arc
   **/
-  monolits: (Bezier | Linear)[]
+  monolits: MonolitFunction[];
   constructor(nclist: CompleteFunctionConfig){
     if(nclist.length%2==0) throw Error("Invalid node connector list");
     const monolitsCount = Math.floor(nclist.length/2);
@@ -46,4 +47,15 @@ export class CompleteFunction{
     return spline;
   }
 
+  getCoordsByDistance(t: number) {
+    return this.monolits[Math.trunc(t)].getCoords(t-Math.trunc(t));
+  }
+
+  minimumDistanceFrom(point: [number, number]): number {
+    let dist = Number.POSITIVE_INFINITY;
+    for(const monolit of this.monolits){
+      if(dist > monolit.distanceFromPoint(point)) dist = monolit.distanceFromPoint(point);
+    }
+    return dist;
+  }
 }
