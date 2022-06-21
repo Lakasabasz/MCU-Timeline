@@ -6,6 +6,9 @@ export class MCUTimeline{
 
   constructor(canvasid: string, setupdata: SetupData){
     const canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById(canvasid);
+    canvas.width = document.body.clientWidth;
+    canvas.height = document.body.clientHeight;
+
     if(canvas === null){
       throw new Error("<canvas> with id " + canvasid + " not exists");
     }
