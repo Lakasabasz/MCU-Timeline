@@ -16,7 +16,7 @@ function login(e: Event){
     }).then(response => {
         console.log(response);
         return response.json();
-    }).then(data => {if(data.error == 0) alert("Login successful"); else alert("Login failed");});
+    }).then(data => {if(data.error == 0) window.location.href = "/panel.html"; else alert("Login failed");});
 }
 
 window.addEventListener("load", (e)=>{
