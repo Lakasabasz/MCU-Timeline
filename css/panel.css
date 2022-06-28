@@ -55,7 +55,7 @@ form>div>input::placeholder{
     color: var(--second-background);
 }
 
-form>div>input[type="submit"] {
+form>div>input[type="button"] {
     height: 48px;
     width: 138px;
     flex: none;
