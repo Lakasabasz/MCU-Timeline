@@ -63,13 +63,13 @@ export class WebGLScene{
     this.VERTEX_PER_VALUE = 2;
 
     this.shaders = {};
+    if(setupdata.shaders.length == 0) throw new Error("No shaders provided");
     for(const shaderData of setupdata.shaders){
       try{
         let shader = new Shader(this.gl, shaderData.vCode, shaderData.fCode, shaderData.info, shaderData.name);
         this.shaders[shaderData.name] = shader;
       } catch(e){
         console.error(e);
-        continue;
       }
     }
 
@@ -88,6 +88,7 @@ export class WebGLScene{
 
     this.projectionMatrix = this.createIsometricProjection(this.canvas.width, this.canvas.height);
 
+    if(!(setupdata.subpoint.shader in this.shaders)) throw new Error("Subpoint shader not found");
     this.subpoint = new Point(this.shaders[setupdata.subpoint.shader]);
     this.subpointsettings = {additionalSize: setupdata.subpoint.additionalSize};
   }

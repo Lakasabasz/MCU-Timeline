@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <title>Logowanie do panelu</title>
     <link rel="stylesheet" href="css/panel.css">
+    <script src="js/login.js" type="module"></script>
 </head>
 <body>
     <form method="post">
         <div>
-            <input type="text" id="login" name="login" placeholder="Login">
-            <input type="password" id="password" name="password" placeholder="Hasło">
-            <input type="submit" value="Logowanie">
+            <input type="text" id="login" name="login" placeholder="Login" required>
+            <input type="password" id="password" name="password" placeholder="Hasło" required>
+            <input type="button" id="btlogin" value="Logowanie">
         </div>
     </form>
 </body>
